@@ -1,0 +1,81 @@
+import { Link, useLocation } from "react-router-dom";
+
+const SideNavbar = () => {
+    const location = useLocation();
+    
+    const navItems = [
+        { to: '/', icon: 'Dashboard black.png', label: 'Dashboard' },
+        { to: '/branch_list', icon: 'Branch black.png', label: 'Branches' },
+        { 
+            label: 'Reserve Fuel',
+            icon: 'Reserve Fuel black.png',
+            children: [
+                { to: '/daily_incoming_fuel', label: 'Daily Incoming' },
+                { to: '/daily_outgoing_fuel', label: 'Daily Outgoing' },
+                { to: '/total_reserve_fuel', label: 'Total Reserve' }
+            ]
+        },
+        { to: '/active_employee', icon: 'Employee black.png', label: 'Employees' },
+        { to: '/fuel_status', icon: 'Fuel Status black.png', label: 'Fuel Status' },
+        { to: '/settings', icon: 'Setting black.png', label: 'Settings' },
+        { to: '/profile', icon: 'Profile black.png', label: 'Profile' },
+    ];
+
+    const isActive = (path) => location.pathname === path;
+
+    return (
+        <div className="w-64 bg-base-200 min-h-screen">
+            <div className="p-4">
+                <h1 className="text-xl font-bold mb-8">Smart Petrol Pump</h1>
+                <ul className="menu bg-base-200 w-full p-0">
+                    {navItems.map((item, index) => (
+                        <li key={index} className="mb-1">
+                            {item.to ? (
+                                <Link 
+                                    to={item.to}
+                                    className={`flex items-center px-4 py-3 rounded-lg ${isActive(item.to) ? 'bg-primary text-white' : 'hover:bg-base-300'}`}
+                                >
+                                    {item.icon && (
+                                        <img 
+                                            className="w-5 h-5 mr-3" 
+                                            src={`/Side Navbar Icon/${item.icon}`} 
+                                            alt={`${item.label} icon`} 
+                                        />
+                                    )}
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <details open>
+                                    <summary className="font-medium">
+                                        {item.icon && (
+                                            <img 
+                                                className="w-5 h-5 mr-3" 
+                                                src={`/Side Navbar Icon/${item.icon}`} 
+                                                alt={`${item.label} icon`} 
+                                            />
+                                        )}
+                                        {item.label}
+                                    </summary>
+                                    <ul className="ml-4 mt-1">
+                                        {item.children?.map((child, childIndex) => (
+                                            <li key={childIndex}>
+                                                <Link 
+                                                    to={child.to}
+                                                    className={`flex items-center px-4 py-2 rounded-lg ${isActive(child.to) ? 'bg-primary text-white' : 'hover:bg-base-300'}`}
+                                                >
+                                                    {child.label}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </details>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    );
+};
+
+export default SideNavbar;
